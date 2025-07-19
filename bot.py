@@ -47,3 +47,12 @@ if __name__ == "__main__":
     print("📡 Устанавливаем Webhook...")
     bot.remove_webhook()
     bot.set_webhook(url=f"{os.getenv('RENDER_EXTERNAL_URL')}/{TOKEN}")
+if __name__ == "__main__":
+    print("✅ Бот запускается...")
+    print("📡 Устанавливаем Webhook...")
+    bot.remove_webhook()
+    bot.set_webhook(url=f"{os.getenv('RENDER_EXTERNAL_URL')}/{TOKEN}")
+
+    # Запускаем Flask, чтобы Render видел открытый порт
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
