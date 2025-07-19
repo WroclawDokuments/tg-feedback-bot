@@ -2,21 +2,21 @@ import os
 import telebot
 from flask import Flask, request
 
-# Получаем переменные окружения
-TOKEN = os.getenv("BOT_TOKEN")
-ADMIN_ID = os.getenv("ADMIN_ID")
+TOKEN = os.getenv('BOT_TOKEN')
+ADMIN_ID = os.getenv('ADMIN_ID')
 
-if not TOKEN or not ADMIN_ID:
-    print("❌ BOT_TOKEN или ADMIN_ID не заданы. Проверь переменные окружения.")
+if not TOKEN:
+    print("ERROR: BOT_TOKEN не задан!")
+    exit(1)
+if not ADMIN_ID:
+    print("ERROR: ADMIN_ID не задан!")
     exit(1)
 
 try:
     ADMIN_ID = int(ADMIN_ID)
 except ValueError:
-    print("❌ ADMIN_ID должен быть числом.")
-    exit(2)
-
-print("✅ Бот запускается...")
+    print("ERROR: ADMIN_ID должен быть числом!")
+    exit(1)
 
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
@@ -44,15 +44,10 @@ def handle_message(message):
     bot.reply_to(message, "✅ Спасибо! Ваше сообщение отправлено. Мы скоро свяжемся с вами.")
 
 if __name__ == "__main__":
-    print("📡 Устанавливаем Webhook...")
-    bot.remove_webhook()
-    bot.set_webhook(url=f"{os.getenv('RENDER_EXTERNAL_URL')}/{TOKEN}")
-if __name__ == "__main__":
     print("✅ Бот запускается...")
     print("📡 Устанавливаем Webhook...")
     bot.remove_webhook()
     bot.set_webhook(url=f"{os.getenv('RENDER_EXTERNAL_URL')}/{TOKEN}")
 
-    # Запускаем Flask, чтобы Render видел открытый порт
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
